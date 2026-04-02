@@ -1,0 +1,76 @@
+#! /bin/bash
+#  by: Andrew Velez
+
+services-status() {
+  local _svdir="${SVDIR:-/var/service}"
+  sudo sv check "${_svdir}"/*
+}
+export -f "services-status"
+
+test-substring() {
+  case "$1" in
+    *"$2"*) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+export -f "test-substring"
+
+add-path-dir() {
+  # add-path-dir func must remain with {} because it's modifying PATH
+
+  if [ -z "$1" ] || ! [ -d "$2" ]; then
+    return 1
+  fi
+
+  if ! test-substring ":${!1}:" ":${2}:"; then
+    eval "$1=\"${2}:${!1}\""
+  fi
+}
+export -f "add-path-dir"
+
+open-file-editor() {
+  /bin/code-oss -r "$@" > /dev/null 2>&1
+}
+export -f "open-file-editor"
+
+# Name: get-logs
+# Desc: Get logs for the passed in params that is paged and reversed.
+# Param [_logfile]: Which log file, default is everything/current
+# Param [_numlines]: How many lines of the log to grab, default is 5000
+# Param [_optgrep]: Options to pass straight to grep
+get-logs() {
+  local _logfile="${1:-/var/log/socklog/everything/current}"
+  local _numlines="${2:-5000}"
+  local _optgrep="${3}"
+
+  if [[ -z ${_optgrep} ]]; then
+    tail -n "${_numlines}" "${_logfile}" | tac | bat -l log
+  else
+    tail -n "${_numlines}" "${_logfile}" | tac | grep -F "${_optgrep}" | bat -l log
+  fi
+}
+export -f "get-logs"
+
+# Source - https://stackoverflow.com/a
+# Posted by Rucent88
+# Retrieved 2025-12-24, License - CC BY-SA 4.0
+sudo_plus() {
+  [[ "$(type -t "$1")" == "function" ]] && sudo bash -c "$(declare -f "$1"); $*"
+}
+export -f "sudo_plus"
+
+init_repo() {
+  _repo_name="$1"
+  _full_repo_dir="$HOME/Code/${_repo_name}"
+
+  # shellcheck disable=SC2164
+  if gh repo create "andrewvelez/${_repo_name}" --public && gh repo clone "andrewvelez/${_repo_name}" "${_full_repo_dir}" &&
+    cd "${_full_repo_dir}" && rad init "${_repo_name}"; then
+
+    touch ".gitignore"
+  else
+    echo "Error creating repo"
+    return 1
+  fi
+} > /dev/null 2>&1
+export -f "init_repo"

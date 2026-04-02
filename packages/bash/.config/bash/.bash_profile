@@ -4,3 +4,11 @@
 #  by Andrew Velez
 
 [[ -r "$HOME/.bashrc" ]] && . "$HOME/.bashrc"
+
+
+# filen-cli
+PATH=$PATH:~/.filen-cli/bin
+
+
+# filen-cli
+PATH=$PATH:~/.filen-cli/bin

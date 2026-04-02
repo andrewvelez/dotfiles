@@ -1,0 +1,31 @@
+#! /bin/bash
+#  by: Andrew Velez
+
+alias ls='ls --color=auto'
+alias l='ls -Al'
+alias ll='ls -AlL'
+alias where='whereis'
+alias sudo='sudo '
+alias e='open-file-editor'
+alias cat='bat --paging=never'
+alias bm='bashmatic'
+
+# directory shortcuts
+alias ph='cd $HOME; clear'
+alias lbin='cd $HOME/.local/bin'
+
+# void specific
+alias vadd='sudo xbps-install -S '
+alias vfind='sudo xbps-query -Rs '
+alias vdel='sudo xbps-remove '
+alias vupdate='sudo xbps-install -Su; flatpak update '
+alias vsrv='services-status'
+
+# git
+alias ghnew='gh repo create --source=. --remote=origin --push --public'
+alias gc='git commit -a -m '
+alias gs='git status'
+alias gpush='git pull; git push; gs '
+
+# python
+alias python='python3 '

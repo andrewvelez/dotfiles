@@ -1,0 +1,55 @@
+#! /bin/bash
+#  by: Andrew Velez
+
+HISTCONTROL=$HISTCONTROL${HISTCONTROL+:}ignoredups
+HISTCONTROL=ignoreboth
+shopt -s histappend
+shopt -s checkwinsize
+
+if [[ -x /usr/bin/dircolors ]]; then
+  (test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)") || eval "$(dircolors -b)"
+  alias ls='ls --color=auto'
+fi
+
+export TERM="xterm-256color"
+export XDG_CONFIG_HOME="$HOME/.config"
+export NVM_DIR="$HOME/.local/nvm"
+export BUN_INSTALL="$HOME/.local/bun"
+export RUSTUP_HOME="$HOME/.local/rustup"
+export CARGO_HOME="$HOME/.local/cargo"
+export GOPATH="$HOME/.local/go"
+export RUBY_HOME="$HOME/.local/share/gem/ruby/3.4.0"
+export RUSTFLAGS="-Clink-arg=-z -Clink-arg=nostart-stop-gc"
+export RUSTUP_INIT_SKIP_PATH_CHECK="yes"
+export RAD_HOME="$HOME/.radicle"
+export FILEN_CLI_DATA_DIR="$XDG_CONFIG_HOME/filen-cli"
+export DELTA_FEATURES="diff-so-fancy"
+
+add-path-dir "PATH" "$HOME/.local/bin"
+add-path-dir "PATH" "$DOTNET_ROOT"
+add-path-dir "PATH" "$DOTNET_ROOT/tools"
+add-path-dir "PATH" "$RUBY_HOME/bin"
+add-path-dir "PATH" "/usr/lib/go/bin"
+add-path-dir "PATH" "$GOPATH/bin"
+add-path-dir "PATH" "$CARGO_HOME/bin"
+add-path-dir "PATH" "$BUN_INSTALL/bin"
+add-path-dir "PATH" "$HOME/.local/radicle/bin"
+add-path-dir "PATH" "$HOME/.filen-cli/bin"
+#add-path-dir "PATH" "/opt/fil/bin"
+
+add-path-dir "XDG_DATA_DIRS" "/var/lib/flatpak/exports/share"
+add-path-dir "XDG_DATA_DIRS" "$HOME/.local/flatpak/exports/share"
+add-path-dir "XDG_DATA_DIRS" "$HOME/.local"
+
+# Source all the things!
+type -t "oh-my-posh" > /dev/null && [[ -r "$HOME/.config/posh/onehalf.modified.omp.json" ]] && eval "$(oh-my-posh init bash --config "$HOME"/.config/posh/onehalf.modified.omp.json)"
+type -t "batman" > /dev/null && eval "$(batman --export-env)"
+type -t "jj" > /dev/null && eval "$(jj util completion bash)"
+[[ -r "$NVM_DIR/nvm.sh" ]] && . "$NVM_DIR/nvm.sh"
+[[ -r "$NVM_DIR/bash_completion" ]] && . "$NVM_DIR/bash_completion"
+[[ -r "$CARGO_HOME/env" ]] && . "$CARGO_HOME/env"
+[[ -r "$HOME/.rbenv/bin/rbenv" ]] && eval "$("$HOME"/.rbenv/bin/rbenv init - --no-rehash bash)"
+[[ -r "$HOME/.config/broot/launcher/bash/br" ]] && . "$HOME/.config/broot/launcher/bash/br"
+
+# identity daemons
+eval "$(ssh-agent -s)" > /dev/null

@@ -28,6 +28,7 @@ cli11
 cmake
 cmake-extras
 cronie
+cryfs
 cryptsetup
 dejavu-fonts-ttf
 delta
@@ -48,6 +49,8 @@ gnome-themes-standard
 gnupg2
 gnupg2-scdaemon
 go
+gpgme
+gpgme-devel
 grub-i386-efi
 grub-x86_64-efi
 gtk-lshw
@@ -81,6 +84,7 @@ libevdev-devel
 libevdev-tools
 libevdevPlus
 libevdevPlus-devel
+libgcrypt-devel
 libpcap-devel
 libspa-bluetooth
 libvirt
@@ -172,6 +176,7 @@ yakuake
 yaml-cpp
 yaml-cpp-devel
 yt-dlp
+zig
 zip
 zlib-ng-devel
 zsh
