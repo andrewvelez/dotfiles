@@ -6,6 +6,7 @@ alias l='ls -Al'
 alias ll='ls -AlL'
 alias where='whereis'
 alias sudo='sudo '
+alias d='cd'
 alias e='open-file-editor'
 alias cat='bat --paging=never'
 alias bm='bashmatic'
@@ -27,5 +28,5 @@ alias gc='git commit -a -m '
 alias gs='git status'
 alias gpush='git pull; git push; gs '
 
-# python
+# misc
 alias python='python3 '

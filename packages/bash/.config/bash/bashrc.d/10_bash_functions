@@ -59,18 +59,26 @@ sudo_plus() {
 }
 export -f "sudo_plus"
 
-init_repo() {
-  _repo_name="$1"
-  _full_repo_dir="$HOME/Code/${_repo_name}"
+new_repo() {
+  [[ -z $1 || -d $1 ]] && return 1
 
-  # shellcheck disable=SC2164
-  if gh repo create "andrewvelez/${_repo_name}" --public && gh repo clone "andrewvelez/${_repo_name}" "${_full_repo_dir}" &&
-    cd "${_full_repo_dir}" && rad init "${_repo_name}"; then
-
-    touch ".gitignore"
-  else
-    echo "Error creating repo"
-    return 1
+  if ! { gh auth status && gh repo create "$1" --public --clone --gitignore Node; } > /dev/null; then
+    echo "error creating github repo" && return 1
   fi
-} > /dev/null 2>&1
-export -f "init_repo"
+
+  cd "$1" || return 1
+
+  if ! { rad auth && rad init --name "$1" --description "$1" --default-branch main --private --no-confirm; } > /dev/null; then
+    echo "error creating radical repo" && return 1
+  fi
+
+  local _rad_url
+  _rad_url="$(rad .)"
+
+  if ! { git remote set-url --add --push origin "git@github.com:andrewvelez/$1.git" && git remote set-url --add --push origin "${_rad_url}"; } > /dev/null; then
+    echo "error setting remotes" && return 1
+  fi
+
+  cd ".."
+}
+export -f "new_repo"
