@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /usr/bin/env bash
 #  by: Andrew Velez
 
 HISTCONTROL=$HISTCONTROL${HISTCONTROL+:}ignoredups
@@ -24,23 +24,23 @@ export RUSTUP_INIT_SKIP_PATH_CHECK="yes"
 export RAD_HOME="$HOME/.radicle"
 export FILEN_CLI_DATA_DIR="$XDG_CONFIG_HOME/filen-cli"
 export DELTA_FEATURES="diff-so-fancy"
-export STOW_DIR="$HOME/.local/stow"
+export STOW_DIR="$HOME/Code/dotfiles/stow"
 
-add-path-dir "PATH" "$HOME/.local/bin"
-add-path-dir "PATH" "$DOTNET_ROOT"
-add-path-dir "PATH" "$DOTNET_ROOT/tools"
-add-path-dir "PATH" "$RUBY_HOME/bin"
-add-path-dir "PATH" "/usr/lib/go/bin"
-add-path-dir "PATH" "$GOPATH/bin"
-add-path-dir "PATH" "$CARGO_HOME/bin"
-add-path-dir "PATH" "$BUN_INSTALL/bin"
-add-path-dir "PATH" "$HOME/.local/radicle/bin"
-add-path-dir "PATH" "$HOME/.filen-cli/bin"
-#add-path-dir "PATH" "/opt/fil/bin"
+add_dir_path "PATH" "$HOME/.local/bin"
+add_dir_path "PATH" "/opt/texlive/2026/bin/x86_64-linux"
+add_dir_path "PATH" "$DOTNET_ROOT"
+add_dir_path "PATH" "$DOTNET_ROOT/tools"
+add_dir_path "PATH" "$RUBY_HOME/bin"
+add_dir_path "PATH" "/usr/lib/go/bin"
+add_dir_path "PATH" "$GOPATH/bin"
+add_dir_path "PATH" "$CARGO_HOME/bin"
+add_dir_path "PATH" "$BUN_INSTALL/bin"
+add_dir_path "PATH" "$HOME/.local/radicle/bin"
+add_dir_path "PATH" "$HOME/.filen-cli/bin"
 
-add-path-dir "XDG_DATA_DIRS" "/var/lib/flatpak/exports/share"
-add-path-dir "XDG_DATA_DIRS" "$HOME/.local/flatpak/exports/share"
-add-path-dir "XDG_DATA_DIRS" "$HOME/.local"
+add_dir_path "XDG_DATA_DIRS" "/var/lib/flatpak/exports/share"
+add_dir_path "XDG_DATA_DIRS" "$HOME/.local/flatpak/exports/share"
+add_dir_path "XDG_DATA_DIRS" "$HOME/.local"
 
 # Source all the things!
 type -t "oh-my-posh" > /dev/null && [[ -r "$HOME/.config/posh/onehalf.modified.omp.json" ]] && eval "$(oh-my-posh init bash --config "$HOME"/.config/posh/onehalf.modified.omp.json)"
@@ -52,5 +52,4 @@ type -t "jj" > /dev/null && eval "$(jj util completion bash)"
 [[ -r "$HOME/.rbenv/bin/rbenv" ]] && eval "$("$HOME"/.rbenv/bin/rbenv init - --no-rehash bash)"
 [[ -r "$HOME/.config/broot/launcher/bash/br" ]] && . "$HOME/.config/broot/launcher/bash/br"
 
-# identity daemons
-eval "$(ssh-agent -s)" > /dev/null
+[[ $- == *i* ]] && [[ -r "$HOME/.local/share/blesh/ble.sh" ]] && . "$HOME/.local/share/blesh/ble.sh"

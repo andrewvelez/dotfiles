@@ -7,7 +7,7 @@ alias ll='ls -AlL'
 alias where='whereis'
 alias sudo='sudo '
 alias d='cd'
-alias e='open-file-editor'
+alias e='open_file_editor'
 alias cat='bat --paging=never'
 alias bm='bashmatic'
 
@@ -19,8 +19,8 @@ alias lbin='cd $HOME/.local/bin'
 alias vadd='sudo xbps-install -S '
 alias vfind='sudo xbps-query -Rs '
 alias vdel='sudo xbps-remove '
-alias vupdate='sudo xbps-install -Su; flatpak update '
-alias vsrv='services-status'
+alias vupdate='login_updates'
+alias lb='logs_since_boot'
 
 # git
 alias ghnew='gh repo create --source=. --remote=origin --push --public'
@@ -30,3 +30,5 @@ alias gpush='git pull; git push; gs '
 
 # misc
 alias python='python3 '
+alias vpn-on='sudo mullvad-wg up'
+alias vpn-off='sudo mullvad-wg down'

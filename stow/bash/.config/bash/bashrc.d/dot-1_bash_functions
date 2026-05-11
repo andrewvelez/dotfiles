@@ -1,0 +1,127 @@
+#! /bin/bash
+#  by: Andrew Velez
+
+services_status() {
+  local _svdir="${SVDIR:-/var/service}"
+  sudo sv check "${_svdir}"/*
+}
+export -f "services_status"
+
+test_substring() {
+  case "$1" in
+    *"$2"*) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+export -f "test_substring"
+
+add_dir_path() {
+  # add-path-dir func must remain with {} because it's modifying PATH
+
+  if [ -z "$1" ] || ! [ -d "$2" ]; then
+    return 1
+  fi
+
+  if ! test_substring ":${!1}:" ":${2}:"; then
+    eval "$1=\"${2}:${!1}\""
+  fi
+}
+export -f "add_dir_path"
+
+open_file_editor() {
+  /bin/code-oss -r "$@" > /dev/null 2>&1
+}
+export -f "open_file_editor"
+
+# Name: get-logs
+# Desc: Get logs for the passed in params that is paged and reversed.
+# Param [_logfile]: Which log file, default is everything/current
+# Param [_numlines]: How many lines of the log to grab, default is 5000
+# Param [_optgrep]: Options to pass straight to grep
+get_logs() {
+  local _logfile="${1:-/var/log/socklog/everything/current}"
+  local _numlines="${2:-5000}"
+  local _optgrep="${3}"
+
+  if [[ -z ${_optgrep} ]]; then
+    tail -n "${_numlines}" "${_logfile}" | tac | bat -l log
+  else
+    tail -n "${_numlines}" "${_logfile}" | tac | grep -F "${_optgrep}" | bat -l log
+  fi
+}
+export -f "get_logs"
+
+# Source - https://stackoverflow.com/a
+# Posted by Rucent88
+# Retrieved 2025-12-24, License - CC BY-SA 4.0
+sudo_plus() {
+  [[ "$(type -t "$1")" == "function" ]] && sudo bash -c "$(declare -f "$1"); $*"
+}
+export -f "sudo_plus"
+
+new_repo() {
+  local name="$1" owner="andrewvelez" gh_url rad_url
+
+  (
+    set -e
+
+    mkdir -p "$name"
+    cd "$name"
+
+    gh_url="git@github.com:$owner/$name.git"
+
+    git init -b main >/dev/null
+
+    gh auth status >/dev/null
+    gh repo view "$owner/$name" >/dev/null 2>&1 || \
+      gh repo create "$owner/$name" --public >/dev/null
+
+    git remote add origin "$gh_url" 2>/dev/null || \
+      git remote set-url origin "$gh_url"
+
+    rad . >/dev/null 2>&1 || {
+      rad auth >/dev/null
+      rad init --name "$name" --description "$name" --default-branch main --private --no-confirm >/dev/null
+    }
+
+    rad_url="$(rad .)"
+
+    git config --unset-all remote.origin.pushurl 2>/dev/null || true
+    git remote set-url --add --push origin "$gh_url"
+    git remote set-url --add --push origin "$rad_url"
+
+  ) || {
+    echo "Error: Failed to initialize repository '$name'"
+    return 1
+  }
+}
+export -f "new_repo"
+
+login_updates() {
+  sudo -n /usr/bin/xbps-install -Suy
+  /usr/bin/flatpak update -y
+  secret-tool lookup application radicle key passphrase | rad auth --stdin
+  rad node start || true
+}
+export -f "login_updates"
+
+# Gives the log since the last machine boot up with the UTC time fixed (but hardcoded.)
+# Had heavy help from AI.
+logs_since_boot() {
+  sudo cat /var/log/socklog/*/current | sort -u | 
+    tac | sed '/===== BOOT SENTINEL: socklog is alive/q' | tac |
+    perl -MTime::Piece -ne '
+      if (/^([\d-]+T[\d:.]+)(.*)/) {
+        my ($dt_str, $rest) = ($1, $2);
+        $dt_str =~ s/\.\d+$//; # Strip fractional seconds
+        
+        # Parse as UTC, convert to local system time automatically
+        my $t = Time::Piece->strptime($dt_str, "%Y-%m-%dT%H:%M:%S");
+        print $t->localtime->datetime . " " . $rest . "\n";
+      } else {
+        print $_;
+      }
+    ' |
+    bat -l log
+}
+export -f "logs_since_boot"
