@@ -27,8 +27,9 @@ alias ghnew='gh repo create --source=. --remote=origin --push --public'
 alias gc='git commit -a -m '
 alias gs='git status'
 alias gpush='git pull; git push; gs '
+alias nr='sudo new_repo '
 
 # misc
 alias python='python3 '
-alias vpn-on='sudo mullvad-wg up'
-alias vpn-off='sudo mullvad-wg down'
+alias mullvad='$HOME/.local/bin/mullvad-wg.sh '
+alias look='bat -p '

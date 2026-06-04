@@ -25,9 +25,14 @@ export RAD_HOME="$HOME/.radicle"
 export FILEN_CLI_DATA_DIR="$XDG_CONFIG_HOME/filen-cli"
 export DELTA_FEATURES="diff-so-fancy"
 export STOW_DIR="$HOME/Code/dotfiles/stow"
+export DOTNET_ROOT='/usr/share/dotnet'
+export NUGET_PACKAGES='/usr/share/nuget/packages'
+export DOTNET_ADD_GLOBAL_TOOLS_TO_PATH='false'
+export SVDIR="$HOME/.local/service"
 
 add_dir_path "PATH" "$HOME/.local/bin"
-add_dir_path "PATH" "/opt/texlive/2026/bin/x86_64-linux"
+add_dir_path "PATH" "$HOME/.local/scripts"
+add_dir_path "PATH" "$HOME/AppImages"
 add_dir_path "PATH" "$DOTNET_ROOT"
 add_dir_path "PATH" "$DOTNET_ROOT/tools"
 add_dir_path "PATH" "$RUBY_HOME/bin"
@@ -36,11 +41,13 @@ add_dir_path "PATH" "$GOPATH/bin"
 add_dir_path "PATH" "$CARGO_HOME/bin"
 add_dir_path "PATH" "$BUN_INSTALL/bin"
 add_dir_path "PATH" "$HOME/.local/radicle/bin"
-add_dir_path "PATH" "$HOME/.filen-cli/bin"
 
 add_dir_path "XDG_DATA_DIRS" "/var/lib/flatpak/exports/share"
 add_dir_path "XDG_DATA_DIRS" "$HOME/.local/flatpak/exports/share"
 add_dir_path "XDG_DATA_DIRS" "$HOME/.local"
+
+add_dir_path "LD_LIBRARY_PATH" "/usr/local/lib"
+add_dir_path "LD_LIBRARY_PATH" "/usr/lib"
 
 # Source all the things!
 type -t "oh-my-posh" > /dev/null && [[ -r "$HOME/.config/posh/onehalf.modified.omp.json" ]] && eval "$(oh-my-posh init bash --config "$HOME"/.config/posh/onehalf.modified.omp.json)"

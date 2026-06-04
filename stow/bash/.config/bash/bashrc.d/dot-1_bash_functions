@@ -1,11 +1,11 @@
 #! /bin/bash
-#  by: Andrew Velez
+#  by: Andrew Velez 2026
 
-services_status() {
+list_services() {
   local _svdir="${SVDIR:-/var/service}"
   sudo sv check "${_svdir}"/*
 }
-export -f "services_status"
+export -f "list_services"
 
 test_substring() {
   case "$1" in
@@ -14,6 +14,16 @@ test_substring() {
   esac
 }
 export -f "test_substring"
+
+find_lines_in_files() {
+  sudo rg -Fi. "$1" /
+}
+export -f "find_lines_in_files"
+
+find_filenames() {
+  sudo fd -t f "$1" /
+}
+export -f "find_filenames"
 
 add_dir_path() {
   # add-path-dir func must remain with {} because it's modifying PATH
@@ -29,27 +39,9 @@ add_dir_path() {
 export -f "add_dir_path"
 
 open_file_editor() {
-  /bin/code-oss -r "$@" > /dev/null 2>&1
+  code-oss -r "$@" > /dev/null 2>&1
 }
 export -f "open_file_editor"
-
-# Name: get-logs
-# Desc: Get logs for the passed in params that is paged and reversed.
-# Param [_logfile]: Which log file, default is everything/current
-# Param [_numlines]: How many lines of the log to grab, default is 5000
-# Param [_optgrep]: Options to pass straight to grep
-get_logs() {
-  local _logfile="${1:-/var/log/socklog/everything/current}"
-  local _numlines="${2:-5000}"
-  local _optgrep="${3}"
-
-  if [[ -z ${_optgrep} ]]; then
-    tail -n "${_numlines}" "${_logfile}" | tac | bat -l log
-  else
-    tail -n "${_numlines}" "${_logfile}" | tac | grep -F "${_optgrep}" | bat -l log
-  fi
-}
-export -f "get_logs"
 
 # Source - https://stackoverflow.com/a
 # Posted by Rucent88
@@ -70,14 +62,11 @@ new_repo() {
 
     gh_url="git@github.com:$owner/$name.git"
 
-    git init -b main >/dev/null
+    [ -d .git ] || git init -b main >/dev/null
 
     gh auth status >/dev/null
     gh repo view "$owner/$name" >/dev/null 2>&1 || \
       gh repo create "$owner/$name" --public >/dev/null
-
-    git remote add origin "$gh_url" 2>/dev/null || \
-      git remote set-url origin "$gh_url"
 
     rad . >/dev/null 2>&1 || {
       rad auth >/dev/null
