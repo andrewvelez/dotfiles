@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+cd "$HOME/Code/dotfiles/stow" || exit 1
+stow --dir="$PWD" --target="$HOME" -S home
