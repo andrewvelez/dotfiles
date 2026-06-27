@@ -51,49 +51,6 @@ sudo_plus() {
 }
 export -f "sudo_plus"
 
-new_repo() {
-  local name="$1" owner="andrewvelez" gh_url rad_url
-
-  (
-    set -e
-
-    mkdir -p "$name"
-    cd "$name"
-
-    gh_url="git@github.com:$owner/$name.git"
-
-    [ -d .git ] || git init -b main >/dev/null
-
-    gh auth status >/dev/null
-    gh repo view "$owner/$name" >/dev/null 2>&1 || \
-      gh repo create "$owner/$name" --public >/dev/null
-
-    rad . >/dev/null 2>&1 || {
-      rad auth >/dev/null
-      rad init --name "$name" --description "$name" --default-branch main --private --no-confirm >/dev/null
-    }
-
-    rad_url="$(rad .)"
-
-    git config --unset-all remote.origin.pushurl 2>/dev/null || true
-    git remote set-url --add --push origin "$gh_url"
-    git remote set-url --add --push origin "$rad_url"
-
-  ) || {
-    echo "Error: Failed to initialize repository '$name'"
-    return 1
-  }
-}
-export -f "new_repo"
-
-login_updates() {
-  sudo -n /usr/bin/xbps-install -Suy
-  /usr/bin/flatpak update -y
-  secret-tool lookup application radicle key passphrase | rad auth --stdin
-  rad node start || true
-}
-export -f "login_updates"
-
 # Gives the log since the last machine boot up with the UTC time fixed (but hardcoded.)
 # Had heavy help from AI.
 logs_since_boot() {
