@@ -31,21 +31,7 @@ export NUGET_PACKAGES='/usr/share/nuget/packages'
 export DOTNET_ADD_GLOBAL_TOOLS_TO_PATH='false'
 export SVDIR="$HOME/.local/service"
 
-add_dir_path "PATH" "$HOME/.local/bin"
-add_dir_path "PATH" "$HOME/.local/scripts"
-add_dir_path "PATH" "$HOME/AppImages"
-add_dir_path "PATH" "$DOTNET_ROOT"
-add_dir_path "PATH" "$DOTNET_ROOT/tools"
-add_dir_path "PATH" "$RUBY_HOME/bin"
-add_dir_path "PATH" "/usr/lib/go/bin"
-add_dir_path "PATH" "$GOPATH/bin"
-add_dir_path "PATH" "$CARGO_HOME/bin"
-add_dir_path "PATH" "$BUN_INSTALL/bin"
-add_dir_path "PATH" "$HOME/.local/radicle/bin"
-
-add_dir_path "XDG_DATA_DIRS" "/var/lib/flatpak/exports/share"
-add_dir_path "XDG_DATA_DIRS" "$HOME/.local/flatpak/exports/share"
-add_dir_path "XDG_DATA_DIRS" "$HOME/.local"
+[[ -r "${HOME}/.config/bash/path.bash" ]] && . "${HOME}/.config/bash/path.bash"
 
 add_dir_path "LD_LIBRARY_PATH" "/usr/local/lib"
 add_dir_path "LD_LIBRARY_PATH" "/usr/lib"

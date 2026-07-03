@@ -1,43 +1,6 @@
 #! /bin/bash
 #  by: Andrew Velez 2026
 
-list_services() {
-  local _svdir="${SVDIR:-/var/service}"
-  sudo sv check "${_svdir}"/*
-}
-export -f "list_services"
-
-test_substring() {
-  case "$1" in
-    *"$2"*) return 0 ;;
-    *) return 1 ;;
-  esac
-}
-export -f "test_substring"
-
-find_lines_in_files() {
-  sudo rg -Fi. "$1" /
-}
-export -f "find_lines_in_files"
-
-find_filenames() {
-  sudo fd -t f "$1" /
-}
-export -f "find_filenames"
-
-add_dir_path() {
-  # add-path-dir func must remain with {} because it's modifying PATH
-
-  if [ -z "$1" ] || ! [ -d "$2" ]; then
-    return 1
-  fi
-
-  if ! test_substring ":${!1}:" ":${2}:"; then
-    eval "$1=\"${2}:${!1}\""
-  fi
-}
-export -f "add_dir_path"
-
 open_file_editor() {
   code-oss -r "$@" > /dev/null 2>&1
 }

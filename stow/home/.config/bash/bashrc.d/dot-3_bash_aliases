@@ -33,4 +33,3 @@ alias gpush='git pull; git push; gs '
 
 # misc
 alias python='python3 '
-alias mullvad='$HOME/.local/bin/mullvad-wg.sh '
