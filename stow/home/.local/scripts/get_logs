@@ -1,0 +1,70 @@
+#! /usr/bin/env bash
+#  by: Andrew Velez 2026
+
+_nope() {
+    printf '%s\n' "${1}"; exit 2
+}
+
+if [[ ${BASH_SOURCE[0]} != "$0" ]]; then
+  _nope "run this file; do not source it"
+fi
+
+_get_logs() {
+    local _SCRIPT_DIR _LOGFILE _NUMLINES
+    _SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
+    source "${_SCRIPT_DIR}/lib/cli.sh" || _nope "failed to source ~/.local/scripts/lib/cli.sh"
+
+    _LOGFILE="/var/log/socklog/everything/current"
+    _NUMLINES=5000
+
+define_usage "$@" << 'EOF'
+Usage: get_logs [-f logfile] [-n numlines] [grepfilter ...]
+    Displays the 'numlines' most recent lines of the 'logfile' using optional 'grepfilter' to narrow
+    by a specific word.
+
+    Options:
+      -f            Default is /var/log/socklog/everything/current
+      -n            Default is 5000
+      grepfilter    Optional filters, no default
+EOF
+
+    while (($#)); do
+        case "$1" in
+            -f|--file)
+                [[ $# -ge 2 ]] || error "Missing argument for $1"
+                _LOGFILE="$2"
+                shift 2
+                ;;
+            -n|--lines)
+                [[ $# -ge 2 ]] || error "Missing argument for $1"
+                _NUMLINES="$2"
+                shift 2
+                ;;
+            --)
+                shift
+                break
+                ;;
+            -*)
+                error "Unknown option: $1"
+                ;;
+            *)
+                break
+                ;;
+        esac
+    done
+
+    [[ $_NUMLINES =~ ^[1-9][0-9]*$ ]] || _nope "Line count must be a positive integer"
+
+    if (($#)); then
+        tail -n "$_NUMLINES" -- "$_LOGFILE" |
+            tac |
+            grep -F -- "$*" |
+            bat -l log
+    else
+        tail -n "$_NUMLINES" -- "$_LOGFILE" |
+            tac |
+            bat -l log
+    fi
+}
+
+_get_logs "$@"
