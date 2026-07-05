@@ -13,57 +13,57 @@ _is_connected() {
         "You are connected"*)
             return 0
             ;;
-        "You are not connected"*)
-            return 1
-            ;;
         *)
-            exit 1
+            return 1
             ;;
     esac
 }
 
 _up() {
-    local exit_code conf
-    exit_code=1
+    local CONF_FILE
+    CONF_FILE="$1"
 
-    for conf in /etc/wireguard/*.conf; do
-        [[ -r "${conf}" ]] || continue
+    [[ -r "${CONF_FILE}" ]] || { echo 'Wireguard configuration file does not exist.' >&2; return 2; }
 
-        if wg-quick up "$conf" 2> /dev/null && _is_connected; then
-            exit_code=0
-            break;
-        else
-            echo "Failed to connect with wg-quick"
-            continue;
-        fi
-    done
-
-    return "$exit_code"
+    if sudo wg-quick up "${CONF_FILE}" > /dev/null && _is_connected; then
+        return 0
+    else
+        echo 'Failed to connect with wg-quick'
+        return 1
+    fi
 }
 
 _down() {
-    local conf
+    sudo find /etc/wireguard -maxdepth 1 -type f -name '*.conf' -exec wg-quick down {} > /dev/null \;
+}
 
-    for conf in /etc/wireguard/*.conf; do
-        [[ -r "${conf}" ]] || continue
+_list() {
+    local CONF_FILE
 
-        wg-quick down "${conf}" 2> /dev/null
+    for CONF_FILE in /etc/wireguard/*.conf; do
+        printf '%s\n' "${CONF_FILE}"
     done
 }
 
 _mullvad_wg() {
-    [[ "$#" -eq 1 ]] || { echo 'usage: sudo mullvad_wg (up|down)' >&2; return 2; }
-    [[ "${EUID}" -eq 0 ]] || { echo 'Must run this script as sudo.' >&2; return 1; }
-
     case "$1" in
         "up")
-            _up
+            if [[ "$#" -eq 2 ]]; then
+                _up "$2"
+            else
+                echo 'usage: sudo mullvad_wg (up|down|list) [conf_file]'
+                return 2
+            fi
             ;;
         "down")
             _down
             ;;
+        "list")
+            _list
+            ;;
         *)
-            echo 'usage: sudo mullvad_wg (up|down)' >&2; return 2;
+            echo 'usage: sudo mullvad_wg (up|down|list) [conf_file]' >&2
+            return 2
             ;;
     esac
 }

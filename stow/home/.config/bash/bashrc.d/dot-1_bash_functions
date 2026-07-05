@@ -1,36 +1,38 @@
 #! /bin/bash
 #  by: Andrew Velez 2026
 
-open_file_editor() {
-  code-oss -r "$@" > /dev/null 2>&1
+help() {
+    if builtin help "$@" 2> /dev/null; then
+        return 0
+    fi
+
+    if [[ $# -eq 1 ]] && command -v -- "$1" > /dev/null 2>&1; then
+        "$1" --help
+        return
+    fi
+
+    builtin help "$@"
 }
-export -f "open_file_editor"
+
+git() {
+    if [[ "$1" == "push" ]]; then
+        command git pull --ff-only || return
+    fi
+
+    command git "$@"
+}
+
+open_file_editor() {
+    code-oss -r "$@" > /dev/null 2>&1
+}
 
 # Source - https://stackoverflow.com/a
 # Posted by Rucent88
 # Retrieved 2025-12-24, License - CC BY-SA 4.0
 sudo_plus() {
-  [[ "$(type -t "$1")" == "function" ]] && sudo bash -c "$(declare -f "$1"); $*"
+    [[ "$(type -t "$1")" == "function" ]] && sudo bash -c "$(declare -f "$1"); $*"
 }
-export -f "sudo_plus"
 
-# Gives the log since the last machine boot up with the UTC time fixed (but hardcoded.)
-# Had heavy help from AI.
-logs_since_boot() {
-  sudo cat /var/log/socklog/*/current | sort -u | 
-    tac | sed '/===== BOOT SENTINEL: socklog is alive/q' | tac |
-    perl -MTime::Piece -ne '
-      if (/^([\d-]+T[\d:.]+)(.*)/) {
-        my ($dt_str, $rest) = ($1, $2);
-        $dt_str =~ s/\.\d+$//; # Strip fractional seconds
-        
-        # Parse as UTC, convert to local system time automatically
-        my $t = Time::Piece->strptime($dt_str, "%Y-%m-%dT%H:%M:%S");
-        print $t->localtime->datetime . " " . $rest . "\n";
-      } else {
-        print $_;
-      }
-    ' |
-    bat -l log
+img_to_avif() {
+    ffmpeg -i "$1" -c:v libaom-av1 -crf 30 -pix_fmt yuv420p "$2"
 }
-export -f "logs_since_boot"

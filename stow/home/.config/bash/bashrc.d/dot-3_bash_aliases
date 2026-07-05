@@ -23,13 +23,10 @@ alias vdel='sudo xbps-remove '
 alias vupdate='login_update '
 alias vorphans='sudo xbps-remove -Oo '
 alias fpu='flatpak update -y && flatpak uninstall --unused '
-alias lb='logs_since_boot'
 
 # git
-alias ghnew='gh repo create --source=. --remote=origin --push --public'
 alias gc='git commit -a -m '
 alias gs='git status'
-alias gpush='git pull; git push; gs '
 
 # misc
 alias python='python3 '
