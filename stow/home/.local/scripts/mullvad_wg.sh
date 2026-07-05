@@ -20,12 +20,10 @@ _is_connected() {
 }
 
 _up() {
-    local CONF_FILE
-    CONF_FILE="$1"
+    local conf_file
+    conf_file="$(sudo find /etc/wireguard -maxdepth 1 -type f -name "*${1}*.conf" -print -quit)"
 
-    [[ -r "${CONF_FILE}" ]] || { echo 'Wireguard configuration file does not exist.' >&2; return 2; }
-
-    if sudo wg-quick up "${CONF_FILE}" > /dev/null && _is_connected; then
+    if [[ -n "$conf_file" ]] && sudo wg-quick up "$conf_file" > /dev/null 2>&1 && _is_connected; then
         return 0
     else
         echo 'Failed to connect with wg-quick'
@@ -34,15 +32,17 @@ _up() {
 }
 
 _down() {
-    sudo find /etc/wireguard -maxdepth 1 -type f -name '*.conf' -exec wg-quick down {} > /dev/null \;
+    sudo find /etc/wireguard -maxdepth 1 -type f -name '*.conf' -exec wg-quick down {} > /dev/null 2>&1 \;
 }
 
 _list() {
-    local CONF_FILE
+    sudo find /etc/wireguard -maxdepth 1 -name '*.conf' -printf '%p\t%f\n' |
+        awk -F '\t' '{ split($2, name, "-"); print $1 "\t" name[2] }' |
+        column -t -s $'\t'
+}
 
-    for CONF_FILE in /etc/wireguard/*.conf; do
-        printf '%s\n' "${CONF_FILE}"
-    done
+_usage() {
+    echo 'usage: mullvad_wg (up|down|list) [conf_file]'
 }
 
 _mullvad_wg() {
@@ -51,8 +51,7 @@ _mullvad_wg() {
             if [[ "$#" -eq 2 ]]; then
                 _up "$2"
             else
-                echo 'usage: sudo mullvad_wg (up|down|list) [conf_file]'
-                return 2
+                _usage && return 2
             fi
             ;;
         "down")
@@ -62,8 +61,7 @@ _mullvad_wg() {
             _list
             ;;
         *)
-            echo 'usage: sudo mullvad_wg (up|down|list) [conf_file]' >&2
-            return 2
+            _usage && return 2
             ;;
     esac
 }
