@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /usr/bin/env bash
 #  by: Andrew Velez 2026
 
 help() {
@@ -31,8 +31,4 @@ open_file_editor() {
 # Retrieved 2025-12-24, License - CC BY-SA 4.0
 sudo_plus() {
     [[ "$(type -t "$1")" == "function" ]] && sudo bash -c "$(declare -f "$1"); $*"
-}
-
-img_to_avif() {
-    ffmpeg -i "$1" -c:v libaom-av1 -crf 30 -pix_fmt yuv420p "$2"
 }

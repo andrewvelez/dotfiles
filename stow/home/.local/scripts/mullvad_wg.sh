@@ -7,10 +7,10 @@
 _is_connected() {
     local connect_message
     connect_message="$(curl -s https://am.i.mullvad.net/connected)"
-    echo "${connect_message}"
     
     case "${connect_message}" in
-        "You are connected"*)
+        *'You are connected'*)
+            echo "$connect_message"
             return 0
             ;;
         *)
@@ -23,7 +23,7 @@ _up() {
     local conf_file
     conf_file="$(sudo find /etc/wireguard -maxdepth 1 -type f -name "*${1}*.conf" -print -quit)"
 
-    if [[ -n "$conf_file" ]] && sudo wg-quick up "$conf_file" > /dev/null 2>&1 && _is_connected; then
+    if [[ -n "${conf_file}" ]] && sudo wg-quick up "${conf_file}" > /dev/null 2>&1 && _is_connected; then
         return 0
     else
         echo 'Failed to connect with wg-quick'
