@@ -10,6 +10,7 @@ if [[ -x /usr/bin/dircolors ]]; then
   (test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)") || eval "$(dircolors -b)"
   alias ls='ls --color=auto'
 fi
+LS_COLORS+=':*!=30;41'
 
 export TERM="xterm-256color"
 export XDG_CONFIG_HOME="$HOME/.config"
@@ -46,5 +47,6 @@ type -t "jj" > /dev/null && eval "$(jj util completion bash)"
 [[ -r "$CARGO_HOME/env" ]] && . "$CARGO_HOME/env"
 [[ -r "$HOME/.rbenv/bin/rbenv" ]] && eval "$("$HOME"/.rbenv/bin/rbenv init - --no-rehash bash)"
 [[ -r "$HOME/.config/broot/launcher/bash/br" ]] && . "$HOME/.config/broot/launcher/bash/br"
+[[ -r "$HOME/.local/scripts/start_radicle.sh" ]] && . "$HOME/.local/scripts/start_radicle.sh"
 
 [[ $- == *i* ]] && [[ -r "$HOME/.local/share/blesh/ble.sh" ]] && . "$HOME/.local/share/blesh/ble.sh"

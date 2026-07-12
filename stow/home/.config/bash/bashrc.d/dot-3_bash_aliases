@@ -2,8 +2,8 @@
 #  by: Andrew Velez
 
 alias ls='ls --color=auto'
-alias l='ls -Al'
-alias ll='ls -AlL'
+alias ll='ls -Al'
+alias l='ls -AlL'
 alias where='whereis'
 alias sudo='sudo '
 alias d='cd'
