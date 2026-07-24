@@ -1,8 +1,6 @@
 #! /bin/bash
 #  by: Andrew Velez 2026
 
-set -Ee
-trap 'rc=$?; echo "error: ${BASH_SOURCE[0]}:${LINENO}: ${BASH_COMMAND} exited with $rc" >&2' ERR
 [[ ${BASH_SOURCE[0]} == "$0" ]] || { echo 'run this file; do not source it' >&2; return 2; }
 [[ -r "/home/andrew/.config/bash/path.bash" ]] && . "/home/andrew/.config/bash/path.bash"
 
@@ -22,7 +20,7 @@ _new_repo() {
     fi
 
     mkdir -p "$HOME/Code/$repo"
-    cd "$HOME/Code/$repo"
+    cd "$HOME/Code/$repo" || return
 
     git init -b main > /dev/null
     git commit --allow-empty -m "Initial commit" > /dev/null
@@ -31,7 +29,7 @@ _new_repo() {
 
     git config --unset-all remote.origin.pushurl > /dev/null || true
     git remote set-url --add --push origin "git@github.com:$owner/$repo.git" > /dev/null
-    git remote set-url --add --push origin "$(git remote get-url rad)" > /dev/null
+    git remote set-url --add --push origin "$(git remote get-url --push rad)" > /dev/null
 }
 
 _new_repo "$@"

@@ -1,33 +1,22 @@
 #! /bin/bash
 #  by: Andrew Velez
 
-alias ls='ls --color=auto'
-alias ll='ls -Al'
-alias l='ls -AlL'
-alias where='whereis'
+alias ls='ls --color=auto '
+alias ll='ls -Al '
+alias l='ls -AlL '
+alias where='whereis '
 alias sudo='sudo '
-alias d='cd'
 alias e='open_file_editor'
 alias cat='bat -p -P '
-alias bm='bashmatic'
+alias bm='bashmatic '
 alias v='bat -p '
-
-# directory shortcuts
-alias ph='cd $HOME; clear'
-alias lbin='cd $HOME/.local/bin'
-
-# void specific
+alias ph='cd $HOME; clear '
 alias vadd='sudo xbps-install -S '
 alias vfind='sudo xbps-query -Rs '
 alias vdel='sudo xbps-remove '
 alias vupdate='login_update '
 alias vorphans='sudo xbps-remove -Oo '
 alias fpu='flatpak update -y && flatpak uninstall --unused '
-
-# git
 alias gc='git commit -a -m '
-alias gs='git status'
-
-# misc
-alias python='python3 '
-
+alias gs='git status '
+alias latest_updates='v $(ls -t ~/.local/state/vupdate-login/*.log | head -n 1)'

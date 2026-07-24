@@ -3,7 +3,7 @@
 # ~/.config/bash/path.bash
 
 add_dir_path() {
-    if [ -z "$1" ] || ! [ -d "$2" ]; then
+    if [ -z "$1" ] || [ -z "$2" ]; then
         return 1
     fi
 
@@ -17,7 +17,6 @@ add_dir_path() {
 export -f "add_dir_path"
 
 add_dir_path "PATH" "$HOME/.local/bin"
-add_dir_path "PATH" "$HOME/.local/scripts"
 add_dir_path "PATH" "$HOME/AppImages"
 add_dir_path "PATH" "$DOTNET_ROOT"
 add_dir_path "PATH" "$DOTNET_ROOT/tools"

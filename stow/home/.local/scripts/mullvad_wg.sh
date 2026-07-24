@@ -23,7 +23,7 @@ _up() {
     local conf_file
     conf_file="$(sudo find /etc/wireguard -maxdepth 1 -type f -name "*${1}*.conf" -print -quit)"
 
-    if [[ -n "${conf_file}" ]] && sudo wg-quick up "${conf_file}" > /dev/null 2>&1 && _is_connected; then
+    if [[ -n "${conf_file}" ]] && sudo wg-quick up "${conf_file}" && _is_connected; then
         return 0
     else
         echo 'Failed to connect with wg-quick'
@@ -32,7 +32,11 @@ _up() {
 }
 
 _down() {
-    sudo find /etc/wireguard -maxdepth 1 -type f -name '*.conf' -exec wg-quick down {} > /dev/null 2>&1 \;
+    local interface
+
+    for interface in $(sudo wg show interfaces); do
+        sudo wg-quick down "$interface"
+    done > /dev/null 2>&1
 }
 
 _list() {
