@@ -10,6 +10,8 @@ export BUN_INSTALL="$HOME/.local/bun"
 export RUSTUP_HOME="$HOME/.local/rustup"
 export CARGO_HOME="$HOME/.local/cargo"
 export ANDROID_HOME="$HOME/Android/Sdk"
+NDK_HOME="$ANDROID_HOME/ndk/$(ls -1 "$ANDROID_HOME"/ndk)"
+export NDK_HOME
 export GOPATH="$HOME/.local/go"
 export RUBY_HOME="$HOME/.local/share/gem/ruby/3.4.0"
 export RUSTFLAGS="-Clink-arg=-z -Clink-arg=nostart-stop-gc"

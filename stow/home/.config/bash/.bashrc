@@ -7,7 +7,6 @@
 [ -z "$PS1" ] && return
 
 [[ -r "${HOME}/.config/bash/functions.bash" ]] && . "${HOME}/.config/bash/functions.bash"
-
 HISTCONTROL=$HISTCONTROL${HISTCONTROL+:}ignoredups
 HISTCONTROL=ignoreboth
 shopt -s histappend
@@ -39,3 +38,14 @@ type -t "jj" > /dev/null && eval "$(jj util completion bash)"
 [[ $- == *i* ]] && [[ -r "$HOME/.local/share/blesh/ble.sh" ]] && . "$HOME/.local/share/blesh/ble.sh"
 
 [[ -r "${HOME}/.config/bash/aliases.bash" ]] && . "${HOME}/.config/bash/aliases.bash"
+
+# Vite+ bin (https://viteplus.dev)
+. "$HOME/.vite-plus/env"
+
+# pnpm
+export PNPM_HOME="/home/andrew/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME/bin:"*) ;;
+  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
+esac
+# pnpm end
