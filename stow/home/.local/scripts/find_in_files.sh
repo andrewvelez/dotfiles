@@ -5,7 +5,7 @@
 [[ -r "/home/andrew/.config/bash/path.bash" ]] && . "/home/andrew/.config/bash/path.bash"
 
 _find_in_files() {
-    sudo rg -Fi. --no-messages --glob '!**/.var/**' "$1" /home /opt /etc /lib /usr /var/log || [[ $? -eq 1 ]]
+    sudo rg -Fi. --no-messages -g '!**/.var/**' -g '!**/.codex/**' "$1" /home /opt /etc /lib /usr || [[ $? -eq 1 ]]
 }
 
 _find_in_files "$@"

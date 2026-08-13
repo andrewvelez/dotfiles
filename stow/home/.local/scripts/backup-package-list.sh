@@ -1,10 +1,10 @@
-#!/bin/sh
-#  by: Andrew Velez
+#! /bin/sh
+#  @author Andrew Velez 2026
 
 _logged_err_message="Error running xpkg -m > manual_packages"
-_pkgs_backup_file="/home/andrew/Code/.devbox/manual_packages"
+_pkgs_backup_file="/home/andrew/Code/dotfiles/manual_packages"
 
-if ! xpkg -m > "${_pkgs_backup_file}"; then
+if ! sudo /usr/bin/xpkg -m > "${_pkgs_backup_file}"; then
   printf '%s\n' "${_logged_err_message}" |
     vlogger -p cron.err -t manual_packages_backup
   exit 1

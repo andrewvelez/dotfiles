@@ -2,7 +2,7 @@
 #  @author Andrew Velez 2026
 # ~/.config/bash/path.bash
 
-add_dir_path() {
+_add_dir() {
     if [ -z "$1" ] || [ -z "$2" ]; then
         return 1
     fi
@@ -10,21 +10,27 @@ add_dir_path() {
     current="${!1}"
 
     case ":${!1}:" in
-        *":${2}:"*) ;;
-        *) printf -v "$1" '%s:%s' "$2" "${!1}" ;;
+    *":${2}:"*) ;;
+    *) printf -v "$1" '%s:%s' "$2" "${!1}" ;;
     esac
 }
-export -f "add_dir_path"
+export -f "_add_dir"
 
-add_dir_path "PATH" "$HOME/.local/bin"
-add_dir_path "PATH" "$HOME/AppImages"
-add_dir_path "PATH" "$DOTNET_ROOT"
-add_dir_path "PATH" "$DOTNET_ROOT/tools"
-add_dir_path "PATH" "$RUBY_HOME/bin"
-add_dir_path "PATH" "/usr/lib/go/bin"
-add_dir_path "PATH" "$GOPATH/bin"
-add_dir_path "PATH" "$CARGO_HOME/bin"
-add_dir_path "PATH" "$BUN_INSTALL/bin"
-add_dir_path "PATH" "$HOME/.local/radicle/bin"
+_add_dir "PATH" "$HOME/.local/bin"
+_add_dir "PATH" "$HOME/AppImages"
+_add_dir "PATH" "$DOTNET_ROOT"
+_add_dir "PATH" "$DOTNET_ROOT/tools"
+_add_dir "PATH" "$RUBY_HOME/bin"
+_add_dir "PATH" "/usr/lib/go/bin"
+_add_dir "PATH" "$GOPATH/bin"
+_add_dir "PATH" "$CARGO_HOME/bin"
+_add_dir "PATH" "$BUN_INSTALL/bin"
+_add_dir "PATH" "$HOME/.local/radicle/bin"
+_add_dir 'PATH' "/opt/android-studio/bin"
+_add_dir 'PATH' "$PNPM_HOME/bin"
+
+_add_dir "LD_LIBRARY_PATH" "/usr/local/lib"
+_add_dir "LD_LIBRARY_PATH" "/usr/lib"
 
 export PATH
+export LD_LIBRARY_PATH

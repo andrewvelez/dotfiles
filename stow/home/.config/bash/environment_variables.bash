@@ -1,5 +1,22 @@
 #! /bin/bash
+#  @author Andrew Velez 2026
+#  @summary $HOME/.config/bash/bashrc
+#  @summary bashrc is called for all terminal shell (not gui login) from bash_profile
 
+########### Brought in from the rain #############
+HISTCONTROL=$HISTCONTROL${HISTCONTROL+:}ignoredups
+HISTCONTROL=ignoreboth
+shopt -s histappend
+shopt -s checkwinsize
+
+if [[ -x /usr/bin/dircolors ]]; then
+    (test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)") || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+fi
+LS_COLORS+=':*!=30;41'
+################################################
+
+## Environment Variables
 export TERM="xterm-256color"
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
@@ -25,3 +42,4 @@ export NUGET_PACKAGES="$HOME/.local/share/nuget/packages"
 export DOTNET_ADD_GLOBAL_TOOLS_TO_PATH='false'
 export SVDIR="$HOME/.local/service"
 export VSCODE_EXTENSIONS="$HOME/.local/share/code-oss/extensions"
+export PNPM_HOME="$HOME/.local/share/pnpm"
