@@ -43,3 +43,4 @@ export DOTNET_ADD_GLOBAL_TOOLS_TO_PATH='false'
 export SVDIR="$HOME/.local/service"
 export VSCODE_EXTENSIONS="$HOME/.local/share/code-oss/extensions"
 export PNPM_HOME="$HOME/.local/share/pnpm"
+export ODIN_HOME="$HOME/.local/odin"

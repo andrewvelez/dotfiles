@@ -14,16 +14,8 @@ help() {
     builtin help "$@"
 }
 
-git() {
-    if [[ "$1" == "push" ]]; then
-        command git pull --ff-only || return
-    fi
-
-    command git "$@"
-}
-
 open_file_editor() {
-    code-oss -r "$@" > /dev/null 2>&1
+    code -r "$@" > /dev/null 2>&1
 }
 
 # Source - https://stackoverflow.com/a

@@ -28,6 +28,8 @@ _add_dir "PATH" "$BUN_INSTALL/bin"
 _add_dir "PATH" "$HOME/.local/radicle/bin"
 _add_dir 'PATH' "/opt/android-studio/bin"
 _add_dir 'PATH' "$PNPM_HOME/bin"
+_add_dir 'PATH' "$HOME/.local/odin"
+_add_dir 'PATH' "$HOME/.local/VSCode-linux-x64"
 
 _add_dir "LD_LIBRARY_PATH" "/usr/local/lib"
 _add_dir "LD_LIBRARY_PATH" "/usr/lib"

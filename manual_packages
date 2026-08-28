@@ -44,6 +44,7 @@ cronie
 cryfs
 cryptsetup
 daemontools
+dbus-glib-devel
 dejavu-fonts-ttf
 delta
 detox
@@ -92,6 +93,7 @@ google-fonts-ttf
 gpgme
 gpgme-devel
 gradle
+grub-btrfs
 grub-i386-efi
 grub-x86_64-efi
 gtk-lshw
@@ -261,7 +263,6 @@ vlc
 void-docs-browse
 void-live-audio
 void-repo-nonfree
-vscode
 vttest
 wayland-scanner++
 wayland-utils
