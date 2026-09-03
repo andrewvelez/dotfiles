@@ -5,10 +5,10 @@
 
 [ -z "$PS1" ] && return
 
-[[ -r "${HOME}/.config/bash/functions.bash" ]] && . "${HOME}/.config/bash/functions.bash"
-[[ -r "${HOME}/.config/bash/environment_variables.bash" ]] && . "${HOME}/.config/bash/environment_variables.bash"
-[[ -r "${HOME}/.config/bash/path.bash" ]] && . "${HOME}/.config/bash/path.bash"
-[[ -r "${HOME}/.config/bash/sources.bash" ]] && . "${HOME}/.config/bash/sources.bash"
-[[ -r "${HOME}/.config/bash/aliases.bash" ]] && . "${HOME}/.config/bash/aliases.bash"
+[[ -r "${HOME}/.config/bash/.bash_functions" ]] && . "${HOME}/.config/bash/.bash_functions"
+[[ -r "${HOME}/.config/bash/.bash_env" ]] && . "${HOME}/.config/bash/.bash_env"
+[[ -r "${HOME}/.config/bash/.bash_path" ]] && . "${HOME}/.config/bash/.bash_path"
+[[ -r "${HOME}/.config/bash/.bash_sourced" ]] && . "${HOME}/.config/bash/.bash_sourced"
+[[ -r "${HOME}/.config/bash/.bash_aliases" ]] && . "${HOME}/.config/bash/.bash_aliases"
 
 [[ $- == *i* ]] && [[ -r "$HOME/.local/share/blesh/ble.sh" ]] && . "$HOME/.local/share/blesh/ble.sh"

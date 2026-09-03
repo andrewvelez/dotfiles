@@ -15,7 +15,8 @@ help() {
 }
 
 open_file_editor() {
-    code -r "$@" > /dev/null 2>&1
+    /home/andrew/.local/VSCode-linux-x64/bin/code -r --ozone-platform=wayland \
+        --disable-features=WaylandFractionalScaleV1 "$@" > /dev/null 2>&1
 }
 
 # Source - https://stackoverflow.com/a

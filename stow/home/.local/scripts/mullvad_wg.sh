@@ -2,7 +2,7 @@
 #  by: Andrew Velez 2026
 
 [[ "${BASH_SOURCE[0]}" == "$0" ]] || { echo 'run this file; do not source it' >&2; return 2; }
-[[ -r "/home/andrew/.config/bash/path.bash" ]] && . "/home/andrew/.config/bash/path.bash"
+[[ -r "/home/andrew/.config/bash/.bash_path" ]] && . "/home/andrew/.config/bash/.bash_path"
 
 _is_connected() {
     local connect_message
