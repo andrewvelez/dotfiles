@@ -1,5 +1,7 @@
-#! /usr/bin/env bash
-#  by: Andrew Velez 2026
+#!/bin/bash
+# @author Andrew Velez <andrewvelez@outlook.com>
+# @license MIT
+# @description common file for functions useful for scripts too if you source it
 
 help() {
     if builtin help "$@" 2> /dev/null; then
@@ -24,4 +26,25 @@ open_file_editor() {
 # Retrieved 2025-12-24, License - CC BY-SA 4.0
 sudo_plus() {
     [[ "$(type -t "$1")" == "function" ]] && sudo bash -c "$(declare -f "$1"); $*"
+}
+
+redirect_script_outputs_to_syslog() {
+    exec > >(vlogger -t "${1:-no_tag}") 2>&1
+}
+
+wait_for_network() {
+    if ! timeout 3m sudo -n /usr/local/libexec/sudo-sync-repo; then
+        exit 1
+    fi
+}
+
+safely_source() {
+    if [[ $# -ne 1 || ! -f $1 || ! -r $1 ]]; then
+        return 1
+    fi
+
+    case $1 in
+        /*) source -- "$1" ;;
+        *)  source -- "./$1" ;;
+    esac
 }

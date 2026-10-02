@@ -4,7 +4,7 @@
 #  @summary bashrc is called for all terminal shell (not gui login) from bash_profile
 
 # Source all the things!
-export POSH_THEME="$HOME/.config/posh/gruvbox.omp.json"
+[[ -r "$HOME/.local/share/blesh/ble.sh" ]] && . "$HOME/.local/share/blesh/ble.sh"
 type -t "oh-my-posh" >/dev/null && [[ -r "${POSH_THEME}" ]] && eval "$(oh-my-posh init bash --config "${POSH_THEME}")"
 type -t "batman" >/dev/null && eval "$(batman --export-env)"
 type -t "jj" >/dev/null && eval "$(jj util completion bash)"

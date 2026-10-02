@@ -4,6 +4,3 @@
 #  by Andrew Velez
 
 [[ -r "$HOME/.bashrc" ]] && . "$HOME/.bashrc"
-
-# Vite+ bin (https://viteplus.dev)
-. "$HOME/.vite-plus/env"

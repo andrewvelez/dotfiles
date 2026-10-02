@@ -10,5 +10,3 @@
 [[ -r "${HOME}/.config/bash/.bash_path" ]] && . "${HOME}/.config/bash/.bash_path"
 [[ -r "${HOME}/.config/bash/.bash_sourced" ]] && . "${HOME}/.config/bash/.bash_sourced"
 [[ -r "${HOME}/.config/bash/.bash_aliases" ]] && . "${HOME}/.config/bash/.bash_aliases"
-
-[[ $- == *i* ]] && [[ -r "$HOME/.local/share/blesh/ble.sh" ]] && . "$HOME/.local/share/blesh/ble.sh"

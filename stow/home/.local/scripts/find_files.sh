@@ -5,7 +5,6 @@
 [[ -r "/home/andrew/.config/bash/.bash_path" ]] && . "/home/andrew/.config/bash/.bash_path"
 
 _find_files() {
-    sudo fd -HI -t f -F "$1" /
+    sudo find . -type f -iname "*$1*"
 }
-
 _find_files "$@"
