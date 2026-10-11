@@ -33,9 +33,12 @@ redirect_script_outputs_to_syslog() {
 }
 
 wait_for_network() {
-    if ! timeout 3m sudo -n /usr/local/libexec/sudo-sync-repo; then
-        exit 1
-    fi
+    local START_TIME="$SECONDS"
+    while ! sudo -n /usr/local/libexec/sudo-verify-repo-url > /dev/null; do
+        sleep 5
+        (( SECONDS - START_TIME > 300 )) && return 1
+    done
+    return 0
 }
 
 safely_source() {
