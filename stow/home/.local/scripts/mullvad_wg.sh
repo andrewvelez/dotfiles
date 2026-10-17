@@ -1,6 +1,8 @@
 #! /bin/bash
 #  by: Andrew Velez 2026
 
+set -o pipefail
+
 [[ "${BASH_SOURCE[0]}" == "$0" ]] || { echo 'run this file; do not source it' >&2; return 2; }
 [[ -r "/home/andrew/.config/bash/.bash_path" ]] && . "/home/andrew/.config/bash/.bash_path"
 
@@ -23,20 +25,28 @@ _up() {
     local conf_file
     conf_file="$(sudo find /etc/wireguard -maxdepth 1 -type f -name "*${1}*.conf" -print -quit)"
 
-    if [[ -n "${conf_file}" ]] && sudo wg-quick up "${conf_file}" && _is_connected; then
-        return 0
-    else
-        echo 'Failed to connect with wg-quick'
-        return 1
+    if [[ -n "${conf_file}" ]] && sudo wg-quick up "${conf_file}"; then
+        if _is_connected; then
+            return 0
+        fi
+        sudo wg-quick down "${conf_file}"
     fi
+    echo 'Failed to establish a verified Mullvad connection' >&2
+    return 1
 }
 
 _down() {
-    local interface
+    local interface interfaces status=0
 
-    for interface in $(sudo wg show interfaces); do
-        sudo wg-quick down "$interface"
-    done > /dev/null 2>&1
+    if ! interfaces="$(sudo wg show interfaces)"; then
+        return 1
+    fi
+    for interface in $interfaces; do
+        if ! sudo wg-quick down "$interface"; then
+            status=1
+        fi
+    done
+    return "$status"
 }
 
 _list() {
